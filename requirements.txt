@@ -1,0 +1,15 @@
+# Dependencias del Sistema de Onboarding Rivcon RRHH
+# Python 3.10+
+
+# Django Framework
+Django>=5.2.8,<6.0
+
+# Base de datos (opcional, para PostgreSQL en producción)
+# psycopg2-binary>=2.9.9
+
+# Pillow para manejo de imágenes (si subes fotos)
+Pillow>=10.0.0
+
+# Zona horaria (opcional, si necesitas mejor manejo de timezones)
+# pytz>=2024.1
+

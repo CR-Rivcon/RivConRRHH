@@ -1,0 +1,94 @@
+{% extends 'gestor/base.html' %}
+
+{% block page_title %}Puestos{% endblock %}
+
+{% block content %}
+<div class="mb-6 flex items-center justify-between">
+    <div>
+        <h2 class="text-2xl font-bold text-gray-900">Puestos</h2>
+        <p class="mt-1 text-sm text-gray-500">Gestiona los puestos de trabajo</p>
+    </div>
+    {% if perms.gestor.add_puesto %}
+    <a href="{% url 'gestor:puesto_create' %}" 
+       class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+        <i class="fas fa-plus mr-2"></i>
+        Nuevo Puesto
+    </a>
+    {% endif %}
+</div>
+
+<div class="bg-white shadow-lg rounded-lg overflow-hidden">
+    <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+            <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Puesto
+                </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Departamento
+                </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Nivel
+                </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Rango Salarial
+                </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Empleados
+                </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Estado
+                </th>
+            </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+            {% for puesto in puestos %}
+            <tr class="hover:bg-gray-50 transition-colors duration-150">
+                <td class="px-6 py-4">
+                    <div class="text-sm font-medium text-gray-900">{{ puesto.titulo }}</div>
+                    <div class="text-sm text-gray-500">{{ puesto.descripcion|truncatewords:10|default:"" }}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                        {{ puesto.departamento.nombre }}
+                    </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {{ puesto.get_nivel_display }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {% if puesto.salario_minimo and puesto.salario_maximo %}
+                        ${{ puesto.salario_minimo|floatformat:0 }} - ${{ puesto.salario_maximo|floatformat:0 }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="text-sm font-medium text-gray-900">{{ puesto.total_empleados }}</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    {% if puesto.activo %}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        Activo
+                    </span>
+                    {% else %}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                        Inactivo
+                    </span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="px-6 py-12 text-center text-gray-500">
+                    <i class="fas fa-briefcase text-4xl mb-3"></i>
+                    <p>No hay puestos creados</p>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
+

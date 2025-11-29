@@ -1,0 +1,183 @@
+{% extends 'gestor/base.html' %}
+
+{% block page_title %}{% if object %}Editar{% else %}Nuevo{% endif %} Empleado{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+    <h2 class="text-2xl font-bold text-gray-900">
+        {% if object %}Editar Empleado{% else %}Nuevo Empleado{% endif %}
+    </h2>
+    <p class="mt-1 text-sm text-gray-500">
+        {% if object %}
+        Actualiza la información del empleado
+        {% else %}
+        Completa el formulario para dar de alta a un nuevo empleado. Se crearán automáticamente las tareas de onboarding y se enviará un correo de bienvenida.
+        {% endif %}
+    </p>
+</div>
+
+<div class="bg-white shadow-lg rounded-lg">
+    <form method="post" class="space-y-6 p-6">
+        {% csrf_token %}
+        
+        <!-- Información de Usuario -->
+        <div>
+            <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-4">
+                <i class="fas fa-user mr-2 text-blue-600"></i>
+                Información de Acceso
+            </h3>
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <div>
+                    <label for="{{ form.username.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                        {{ form.username.label }}
+                        <span class="text-red-500">*</span>
+                    </label>
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.username.errors.0 }}</p>
+                    {% endif %}
+                    <p class="mt-1 text-sm text-gray-500">{{ form.username.help_text }}</p>
+                </div>
+                
+                <div>
+                    <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                        {{ form.email.label }}
+                        <span class="text-red-500">*</span>
+                    </label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.email.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label for="{{ form.first_name.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                        {{ form.first_name.label }}
+                        <span class="text-red-500">*</span>
+                    </label>
+                    {{ form.first_name }}
+                    {% if form.first_name.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.first_name.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label for="{{ form.last_name.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                        {{ form.last_name.label }}
+                        <span class="text-red-500">*</span>
+                    </label>
+                    {{ form.last_name }}
+                    {% if form.last_name.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.last_name.errors.0 }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Información Personal -->
+        <div>
+            <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-4">
+                <i class="fas fa-id-card mr-2 text-blue-600"></i>
+                Información Personal
+            </h3>
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                {% for field in form %}
+                    {% if field.name in 'cedula,telefono,telefono_emergencia,fecha_nacimiento,tipo_sangre' %}
+                    <div>
+                        <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            {{ field.label }}
+                            {% if field.field.required %}<span class="text-red-500">*</span>{% endif %}
+                        </label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ field.errors.0 }}</p>
+                        {% endif %}
+                        {% if field.help_text %}
+                            <p class="mt-1 text-sm text-gray-500">{{ field.help_text }}</p>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+                
+                <div class="sm:col-span-2">
+                    <label for="{{ form.direccion.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                        {{ form.direccion.label }}
+                    </label>
+                    {{ form.direccion }}
+                    {% if form.direccion.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.direccion.errors.0 }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Información Laboral -->
+        <div>
+            <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-4">
+                <i class="fas fa-briefcase mr-2 text-blue-600"></i>
+                Información Laboral
+            </h3>
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                {% for field in form %}
+                    {% if field.name in 'puesto,fecha_ingreso,salario,supervisor,estado' %}
+                    <div>
+                        <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            {{ field.label }}
+                            {% if field.field.required %}<span class="text-red-500">*</span>{% endif %}
+                        </label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ field.errors.0 }}</p>
+                        {% endif %}
+                        {% if field.help_text %}
+                            <p class="mt-1 text-sm text-gray-500">{{ field.help_text }}</p>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+                
+                <div class="sm:col-span-2">
+                    <label for="{{ form.notas.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                        {{ form.notas.label }}
+                    </label>
+                    {{ form.notas }}
+                    {% if form.notas.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.notas.errors.0 }}</p>
+                    {% endif %}
+                    {% if form.notas.help_text %}
+                        <p class="mt-1 text-sm text-gray-500">{{ form.notas.help_text }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Botones -->
+        <div class="flex items-center justify-end space-x-3 pt-5 border-t">
+            <a href="{% url 'gestor:empleado_list' %}" 
+               class="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                <i class="fas fa-times mr-2"></i>
+                Cancelar
+            </a>
+            <button type="submit" 
+                    class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                <i class="fas fa-save mr-2"></i>
+                {% if object %}Actualizar{% else %}Crear{% endif %} Empleado
+            </button>
+        </div>
+    </form>
+</div>
+
+<style>
+    /* Estilos para los inputs del formulario */
+    input[type="text"],
+    input[type="email"],
+    input[type="date"],
+    input[type="number"],
+    select,
+    textarea {
+        @apply mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm;
+    }
+</style>
+
+{% endblock %}
+

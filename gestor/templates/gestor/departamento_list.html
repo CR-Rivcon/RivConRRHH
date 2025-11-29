@@ -1,0 +1,45 @@
+{% extends 'gestor/base.html' %}
+
+{% block page_title %}Departamentos{% endblock %}
+
+{% block content %}
+<div class="mb-6 flex items-center justify-between">
+    <div>
+        <h2 class="text-2xl font-bold text-gray-900">Departamentos</h2>
+        <p class="mt-1 text-sm text-gray-500">Gestiona los departamentos de la empresa</p>
+    </div>
+    {% if perms.gestor.add_departamento %}
+    <a href="{% url 'gestor:departamento_create' %}" 
+       class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+        <i class="fas fa-plus mr-2"></i>
+        Nuevo Departamento
+    </a>
+    {% endif %}
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for departamento in departamentos %}
+    <div class="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between mb-4">
+            <div class="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
+                <i class="fas fa-building text-blue-600 text-xl"></i>
+            </div>
+            <span class="text-2xl font-bold text-gray-900">{{ departamento.total_empleados }}</span>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ departamento.nombre }}</h3>
+        <p class="text-sm text-gray-600 mb-4">{{ departamento.descripcion|truncatewords:20|default:"Sin descripción" }}</p>
+        <div class="flex items-center justify-between text-sm text-gray-500">
+            <span><i class="fas fa-briefcase mr-1"></i>{{ departamento.total_puestos }} puesto{{ departamento.total_puestos|pluralize }}</span>
+            <span><i class="fas fa-users mr-1"></i>{{ departamento.total_empleados }} empleado{{ departamento.total_empleados|pluralize }}</span>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-span-3 text-center py-12 text-gray-500">
+        <i class="fas fa-building text-5xl mb-3"></i>
+        <p>No hay departamentos creados</p>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
+

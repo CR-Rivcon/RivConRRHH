@@ -1,0 +1,104 @@
+<div class="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
+    <!-- Logo -->
+    <div class="flex flex-shrink-0 items-center px-4">
+        <h1 class="text-2xl font-bold text-white">
+            <i class="fas fa-building mr-2"></i>
+            Rivcon RRHH
+        </h1>
+    </div>
+    
+    <!-- Navegación -->
+    <nav class="mt-8 flex-1 space-y-1 px-2">
+        <a href="{% url 'gestor:dashboard' %}" 
+           class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-white hover:bg-blue-700 transition-colors duration-150">
+            <i class="fas fa-chart-line mr-3 text-blue-300"></i>
+            Dashboard
+        </a>
+        
+        <a href="{% url 'gestor:empleado_list' %}" 
+           class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-blue-100 hover:bg-blue-700 hover:text-white transition-colors duration-150">
+            <i class="fas fa-users mr-3 text-blue-300"></i>
+            Empleados
+        </a>
+        
+        <a href="{% url 'gestor:kanban' %}" 
+           class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-blue-100 hover:bg-blue-700 hover:text-white transition-colors duration-150">
+            <i class="fas fa-columns mr-3 text-blue-300"></i>
+            Vista Kanban
+        </a>
+        
+        <a href="{% url 'gestor:tarea_list' %}" 
+           class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-blue-100 hover:bg-blue-700 hover:text-white transition-colors duration-150">
+            <i class="fas fa-tasks mr-3 text-blue-300"></i>
+            Tareas
+        </a>
+        
+        <a href="{% url 'gestor:documento_list' %}" 
+           class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-blue-100 hover:bg-blue-700 hover:text-white transition-colors duration-150">
+            <i class="fas fa-file-alt mr-3 text-blue-300"></i>
+            Documentos
+        </a>
+        
+        <!-- Divider -->
+        <div class="border-t border-blue-700 my-4"></div>
+        
+        <!-- Configuración -->
+        <div class="pt-2">
+            <p class="px-2 text-xs font-semibold text-blue-300 uppercase tracking-wider">
+                Configuración
+            </p>
+            
+            <a href="{% url 'gestor:departamento_list' %}" 
+               class="mt-2 group flex items-center px-2 py-2 text-sm font-medium rounded-md text-blue-100 hover:bg-blue-700 hover:text-white transition-colors duration-150">
+                <i class="fas fa-building mr-3 text-blue-300"></i>
+                Departamentos
+            </a>
+            
+            <a href="{% url 'gestor:puesto_list' %}" 
+               class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-blue-100 hover:bg-blue-700 hover:text-white transition-colors duration-150">
+                <i class="fas fa-briefcase mr-3 text-blue-300"></i>
+                Puestos
+            </a>
+        </div>
+        
+        <!-- Divider -->
+        <div class="border-t border-blue-700 my-4"></div>
+        
+        <!-- Admin -->
+        {% if user.is_staff %}
+        <a href="{% url 'admin:index' %}" 
+           class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-blue-100 hover:bg-blue-700 hover:text-white transition-colors duration-150"
+           target="_blank">
+            <i class="fas fa-cog mr-3 text-blue-300"></i>
+            Panel Admin
+        </a>
+        {% endif %}
+        
+        <!-- Logout -->
+        <a href="{% url 'logout' %}" 
+           class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-red-100 hover:bg-red-600 hover:text-white transition-colors duration-150">
+            <i class="fas fa-sign-out-alt mr-3 text-red-300"></i>
+            Cerrar Sesión
+        </a>
+    </nav>
+    
+    <!-- Footer del sidebar -->
+    <div class="flex-shrink-0 flex border-t border-blue-700 p-4">
+        <div class="flex-shrink-0 w-full group block">
+            <div class="flex items-center">
+                <div class="inline-block h-9 w-9 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold">
+                    {{ request.user.first_name.0|default:request.user.username.0|upper }}
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium text-white">
+                        {{ request.user.get_full_name|default:request.user.username }}
+                    </p>
+                    <p class="text-xs font-medium text-blue-300">
+                        {% if user.is_staff %}Administrador{% else %}Usuario{% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

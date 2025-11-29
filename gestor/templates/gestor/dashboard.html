@@ -1,0 +1,294 @@
+{% extends 'gestor/base.html' %}
+
+{% block page_title %}Dashboard Principal{% endblock %}
+
+{% block content %}
+<!-- KPIs Cards -->
+<div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+    <!-- Total Empleados -->
+    <div class="bg-white overflow-hidden shadow-lg rounded-lg hover:shadow-xl transition-shadow duration-300">
+        <div class="p-5">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <div class="rounded-md bg-blue-500 p-3">
+                        <i class="fas fa-users text-white text-2xl"></i>
+                    </div>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 truncate">Total Empleados</dt>
+                        <dd class="flex items-baseline">
+                            <div class="text-2xl font-semibold text-gray-900">{{ total_empleados }}</div>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="bg-gray-50 px-5 py-3">
+            <div class="text-sm">
+                <a href="{% url 'gestor:empleado_list' %}" class="font-medium text-blue-600 hover:text-blue-800">
+                    Ver todos <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ingresos Este Mes -->
+    <div class="bg-white overflow-hidden shadow-lg rounded-lg hover:shadow-xl transition-shadow duration-300">
+        <div class="p-5">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <div class="rounded-md bg-green-500 p-3">
+                        <i class="fas fa-user-plus text-white text-2xl"></i>
+                    </div>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 truncate">Ingresos Este Mes</dt>
+                        <dd class="flex items-baseline">
+                            <div class="text-2xl font-semibold text-gray-900">{{ empleados_este_mes }}</div>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="bg-gray-50 px-5 py-3">
+            <div class="text-sm">
+                <a href="{% url 'gestor:empleado_create' %}" class="font-medium text-green-600 hover:text-green-800">
+                    Agregar nuevo <i class="fas fa-plus ml-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tareas Pendientes -->
+    <div class="bg-white overflow-hidden shadow-lg rounded-lg hover:shadow-xl transition-shadow duration-300">
+        <div class="p-5">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <div class="rounded-md bg-yellow-500 p-3">
+                        <i class="fas fa-tasks text-white text-2xl"></i>
+                    </div>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 truncate">Tareas Pendientes</dt>
+                        <dd class="flex items-baseline">
+                            <div class="text-2xl font-semibold text-gray-900">{{ tareas_pendientes }}</div>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="bg-gray-50 px-5 py-3">
+            <div class="text-sm">
+                <a href="{% url 'gestor:tarea_list' %}" class="font-medium text-yellow-600 hover:text-yellow-800">
+                    Ver tareas <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Documentos Pendientes -->
+    <div class="bg-white overflow-hidden shadow-lg rounded-lg hover:shadow-xl transition-shadow duration-300">
+        <div class="p-5">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <div class="rounded-md bg-red-500 p-3">
+                        <i class="fas fa-file-alt text-white text-2xl"></i>
+                    </div>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 truncate">Docs Pendientes</dt>
+                        <dd class="flex items-baseline">
+                            <div class="text-2xl font-semibold text-gray-900">{{ documentos_pendientes }}</div>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="bg-gray-50 px-5 py-3">
+            <div class="text-sm">
+                <a href="{% url 'gestor:documento_list' %}" class="font-medium text-red-600 hover:text-red-800">
+                    Revisar <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 gap-5 lg:grid-cols-2 mb-8">
+    <!-- Empleados por Estado -->
+    <div class="bg-white shadow-lg rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">
+            <i class="fas fa-chart-pie mr-2 text-blue-600"></i>
+            Empleados por Estado
+        </h3>
+        <div class="space-y-3">
+            {% for estado in empleados_por_estado %}
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
+                        {% if estado.estado == 'pre_ingreso' %}bg-yellow-100 text-yellow-800
+                        {% elif estado.estado == 'en_proceso' %}bg-blue-100 text-blue-800
+                        {% elif estado.estado == 'completado' %}bg-green-100 text-green-800
+                        {% else %}bg-gray-100 text-gray-800{% endif %}">
+                        {{ estado.get_estado_display|default:estado.estado }}
+                    </span>
+                </div>
+                <span class="text-lg font-semibold text-gray-900">{{ estado.total }}</span>
+            </div>
+            {% empty %}
+            <p class="text-gray-500 text-sm">No hay datos disponibles</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Tareas Urgentes -->
+    <div class="bg-white shadow-lg rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">
+            <i class="fas fa-exclamation-triangle mr-2 text-red-600"></i>
+            Tareas Urgentes (Próximos 7 días)
+        </h3>
+        <div class="flow-root">
+            <ul role="list" class="-my-5 divide-y divide-gray-200">
+                {% for tarea in tareas_urgentes %}
+                <li class="py-4">
+                    <div class="flex items-center space-x-4">
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-gray-900 truncate">
+                                {{ tarea.titulo }}
+                            </p>
+                            <p class="text-sm text-gray-500 truncate">
+                                {{ tarea.empleado.usuario.get_full_name }}
+                            </p>
+                        </div>
+                        <div class="flex-shrink-0 text-sm">
+                            <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium
+                                {% if tarea.prioridad == 'urgente' %}bg-red-100 text-red-800
+                                {% elif tarea.prioridad == 'alta' %}bg-orange-100 text-orange-800
+                                {% else %}bg-yellow-100 text-yellow-800{% endif %}">
+                                {{ tarea.fecha_limite|date:"d/m/Y" }}
+                            </span>
+                        </div>
+                    </div>
+                </li>
+                {% empty %}
+                <li class="py-4">
+                    <p class="text-gray-500 text-sm">No hay tareas urgentes</p>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Empleados Recientes y Documentos Sin Verificar -->
+<div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
+    <!-- Empleados Recientes -->
+    <div class="bg-white shadow-lg rounded-lg">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-900">
+                <i class="fas fa-user-clock mr-2 text-blue-600"></i>
+                Empleados Recientes
+            </h3>
+        </div>
+        <div class="divide-y divide-gray-200">
+            {% for empleado in empleados_recientes %}
+            <div class="px-6 py-4 hover:bg-gray-50 transition-colors duration-150">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-semibold">
+                            {{ empleado.usuario.first_name.0|default:empleado.usuario.username.0|upper }}
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-900">
+                                {{ empleado.usuario.get_full_name }}
+                            </p>
+                            <p class="text-sm text-gray-500">
+                                {{ empleado.puesto.titulo }} - {{ empleado.puesto.departamento.nombre }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-end">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                            {% if empleado.estado == 'pre_ingreso' %}bg-yellow-100 text-yellow-800
+                            {% elif empleado.estado == 'en_proceso' %}bg-blue-100 text-blue-800
+                            {% elif empleado.estado == 'completado' %}bg-green-100 text-green-800
+                            {% else %}bg-gray-100 text-gray-800{% endif %}">
+                            {{ empleado.get_estado_display }}
+                        </span>
+                        <a href="{% url 'gestor:empleado_detail' empleado.pk %}" 
+                           class="mt-2 text-xs text-blue-600 hover:text-blue-800">
+                            Ver detalles →
+                        </a>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-blue-600 h-2 rounded-full transition-all duration-300" 
+                             style="width: {{ empleado.progreso }}%"></div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">Progreso: {{ empleado.progreso }}%</p>
+                </div>
+            </div>
+            {% empty %}
+            <div class="px-6 py-4">
+                <p class="text-gray-500 text-sm">No hay empleados recientes</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Documentos Sin Verificar -->
+    <div class="bg-white shadow-lg rounded-lg">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-900">
+                <i class="fas fa-file-invoice mr-2 text-red-600"></i>
+                Documentos Sin Verificar
+            </h3>
+        </div>
+        <div class="divide-y divide-gray-200">
+            {% for documento in documentos_sin_verificar %}
+            <div class="px-6 py-4 hover:bg-gray-50 transition-colors duration-150">
+                <div class="flex items-center justify-between">
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-gray-900 truncate">
+                            {{ documento.nombre }}
+                        </p>
+                        <p class="text-sm text-gray-500 truncate">
+                            {{ documento.empleado.usuario.get_full_name }} - 
+                            <span class="text-xs">{{ documento.get_tipo_display }}</span>
+                        </p>
+                        <p class="text-xs text-gray-400">
+                            Subido: {{ documento.fecha_subida|date:"d/m/Y H:i" }}
+                        </p>
+                    </div>
+                    <div class="ml-4 flex-shrink-0">
+                        <a href="{% url 'gestor:documento_revisar' documento.pk %}" 
+                           class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Revisar
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="px-6 py-4">
+                <p class="text-gray-500 text-sm">Todos los documentos están verificados</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% if documentos_sin_verificar %}
+        <div class="px-6 py-3 bg-gray-50">
+            <a href="{% url 'gestor:documento_list' %}" 
+               class="text-sm font-medium text-blue-600 hover:text-blue-800">
+                Ver todos los documentos <i class="fas fa-arrow-right ml-1"></i>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
+

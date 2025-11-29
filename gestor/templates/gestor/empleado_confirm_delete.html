@@ -1,0 +1,48 @@
+{% extends 'gestor/base.html' %}
+
+{% block page_title %}Eliminar Empleado{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <div class="bg-white shadow-lg rounded-lg p-6">
+        <div class="flex items-center justify-center mb-6">
+            <div class="h-16 w-16 rounded-full bg-red-100 flex items-center justify-center">
+                <i class="fas fa-exclamation-triangle text-red-600 text-3xl"></i>
+            </div>
+        </div>
+        
+        <h2 class="text-2xl font-bold text-gray-900 text-center mb-4">
+            ¿Estás seguro?
+        </h2>
+        
+        <p class="text-gray-600 text-center mb-6">
+            Estás a punto de eliminar al empleado 
+            <strong>{{ object.usuario.get_full_name }}</strong>. 
+            Esta acción no se puede deshacer y eliminará:
+        </p>
+        
+        <ul class="list-disc list-inside text-gray-600 mb-6 space-y-2">
+            <li>El perfil del empleado</li>
+            <li>Todas las tareas asociadas</li>
+            <li>Todos los documentos subidos</li>
+            <li>La cuenta de usuario</li>
+        </ul>
+        
+        <form method="post" class="flex items-center justify-center space-x-3">
+            {% csrf_token %}
+            <a href="{% url 'gestor:empleado_detail' object.pk %}" 
+               class="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                <i class="fas fa-times mr-2"></i>
+                Cancelar
+            </a>
+            <button type="submit" 
+                    class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700">
+                <i class="fas fa-trash mr-2"></i>
+                Sí, Eliminar
+            </button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+

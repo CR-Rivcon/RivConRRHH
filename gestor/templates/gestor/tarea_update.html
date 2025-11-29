@@ -1,0 +1,160 @@
+{% extends 'gestor/base.html' %}
+
+{% block page_title %}Actualizar Tarea{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+    <h2 class="text-2xl font-bold text-gray-900">Actualizar Tarea</h2>
+    <p class="mt-1 text-sm text-gray-500">Modifica el estado y notas de la tarea</p>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Información de la tarea -->
+    <div class="bg-white shadow-lg rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">
+            <i class="fas fa-info-circle mr-2 text-blue-600"></i>
+            Información de la Tarea
+        </h3>
+        
+        <dl class="space-y-3">
+            <div>
+                <dt class="text-sm font-medium text-gray-500">Título</dt>
+                <dd class="mt-1 text-sm text-gray-900 font-semibold">{{ object.titulo }}</dd>
+            </div>
+            <div>
+                <dt class="text-sm font-medium text-gray-500">Descripción</dt>
+                <dd class="mt-1 text-sm text-gray-900">{{ object.descripcion }}</dd>
+            </div>
+            <div>
+                <dt class="text-sm font-medium text-gray-500">Empleado</dt>
+                <dd class="mt-1 text-sm text-gray-900">
+                    <a href="{% url 'gestor:empleado_detail' object.empleado.pk %}" 
+                       class="text-blue-600 hover:text-blue-800">
+                        {{ object.empleado.usuario.get_full_name }}
+                    </a>
+                </dd>
+            </div>
+            <div>
+                <dt class="text-sm font-medium text-gray-500">Responsable</dt>
+                <dd class="mt-1">
+                    <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-800">
+                        {{ object.get_responsable_display }}
+                    </span>
+                </dd>
+            </div>
+            <div>
+                <dt class="text-sm font-medium text-gray-500">Prioridad</dt>
+                <dd class="mt-1">
+                    <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium
+                        {% if object.prioridad == 'urgente' %}bg-red-100 text-red-800
+                        {% elif object.prioridad == 'alta' %}bg-orange-100 text-orange-800
+                        {% elif object.prioridad == 'media' %}bg-yellow-100 text-yellow-800
+                        {% else %}bg-gray-100 text-gray-800{% endif %}">
+                        {{ object.get_prioridad_display }}
+                    </span>
+                </dd>
+            </div>
+            <div>
+                <dt class="text-sm font-medium text-gray-500">Fecha Límite</dt>
+                <dd class="mt-1 text-sm text-gray-900">
+                    <i class="fas fa-calendar mr-1"></i>{{ object.fecha_limite|date:"d/m/Y" }}
+                </dd>
+            </div>
+            <div>
+                <dt class="text-sm font-medium text-gray-500">Estado Actual</dt>
+                <dd class="mt-1">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                        {% if object.estado == 'completado' %}bg-green-100 text-green-800
+                        {% elif object.estado == 'en_progreso' %}bg-blue-100 text-blue-800
+                        {% elif object.estado == 'bloqueado' %}bg-red-100 text-red-800
+                        {% else %}bg-yellow-100 text-yellow-800{% endif %}">
+                        {{ object.get_estado_display }}
+                    </span>
+                </dd>
+            </div>
+        </dl>
+    </div>
+
+    <!-- Formulario de actualización -->
+    <div class="bg-white shadow-lg rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">
+            <i class="fas fa-edit mr-2 text-blue-600"></i>
+            Actualizar Estado
+        </h3>
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="space-y-4">
+                <div>
+                    <label for="{{ form.estado.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                        {{ form.estado.label }}
+                        <span class="text-red-500">*</span>
+                    </label>
+                    {{ form.estado }}
+                    {% if form.estado.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.estado.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label for="{{ form.notas.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                        {{ form.notas.label }}
+                    </label>
+                    {{ form.notas }}
+                    {% if form.notas.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.notas.errors.0 }}</p>
+                    {% endif %}
+                    <p class="mt-1 text-sm text-gray-500">
+                        Agrega notas sobre el progreso o dificultades encontradas
+                    </p>
+                </div>
+            </div>
+            
+            <div class="mt-6 pt-6 border-t flex items-center justify-end space-x-3">
+                <a href="{% url 'gestor:empleado_detail' object.empleado.pk %}" 
+                   class="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                    <i class="fas fa-times mr-2"></i>
+                    Cancelar
+                </a>
+                <button type="submit" 
+                        class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+                    <i class="fas fa-save mr-2"></i>
+                    Actualizar Tarea
+                </button>
+            </div>
+        </form>
+        
+        {% if object.completado_por %}
+        <div class="mt-6 pt-6 border-t">
+            <h4 class="text-sm font-medium text-gray-700 mb-2">Información Adicional</h4>
+            <div class="bg-gray-50 rounded-lg p-3 text-sm space-y-2">
+                <p class="text-gray-600">
+                    <strong>Completado por:</strong> {{ object.completado_por.get_full_name }}
+                </p>
+                <p class="text-gray-600">
+                    <strong>Fecha de completado:</strong> {{ object.fecha_completado|date:"d/m/Y" }}
+                </p>
+            </div>
+        </div>
+        {% endif %}
+        
+        {% if object.notas %}
+        <div class="mt-4">
+            <h4 class="text-sm font-medium text-gray-700 mb-2">Notas Anteriores</h4>
+            <div class="bg-blue-50 rounded-lg p-3 text-sm text-gray-700">
+                {{ object.notas }}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    select, textarea {
+        @apply mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm;
+    }
+</style>
+
+{% endblock %}
+

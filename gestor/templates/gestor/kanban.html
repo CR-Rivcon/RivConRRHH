@@ -1,0 +1,173 @@
+{% extends 'gestor/base.html' %}
+
+{% block page_title %}Vista Kanban - Onboarding{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+    <h2 class="text-2xl font-bold text-gray-900">Vista Kanban - Proceso de Onboarding</h2>
+    <p class="mt-1 text-sm text-gray-500">Visualización del progreso de empleados por estado</p>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- Columna: Pre-ingreso -->
+    <div class="bg-white rounded-lg shadow-lg">
+        <div class="bg-yellow-500 text-white px-4 py-3 rounded-t-lg">
+            <h3 class="font-semibold text-lg flex items-center justify-between">
+                <span>
+                    <i class="fas fa-hourglass-start mr-2"></i>
+                    Pre-ingreso
+                </span>
+                <span class="bg-yellow-600 rounded-full px-2 py-1 text-sm">
+                    {{ empleados_pre_ingreso.count }}
+                </span>
+            </h3>
+        </div>
+        <div class="p-4 space-y-3 max-h-[calc(100vh-250px)] overflow-y-auto">
+            {% for empleado in empleados_pre_ingreso %}
+            <div class="border-2 border-yellow-200 rounded-lg p-4 bg-yellow-50 hover:shadow-md transition-shadow duration-150 cursor-pointer"
+                 onclick="window.location.href='{% url 'gestor:empleado_detail' empleado.pk %}'">
+                <div class="flex items-start justify-between">
+                    <div class="flex items-center">
+                        <div class="h-10 w-10 rounded-full bg-yellow-500 flex items-center justify-center text-white font-semibold">
+                            {{ empleado.usuario.first_name.0|default:empleado.usuario.username.0|upper }}
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900">
+                                {{ empleado.usuario.get_full_name }}
+                            </p>
+                            <p class="text-xs text-gray-600">
+                                {{ empleado.puesto.titulo }}
+                            </p>
+                            <p class="text-xs text-gray-500">
+                                <i class="fas fa-calendar mr-1"></i>{{ empleado.fecha_ingreso|date:"d/m/Y" }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <div class="flex items-center justify-between text-xs text-gray-600 mb-1">
+                        <span>Progreso</span>
+                        <span class="font-semibold">{{ empleado.progreso }}%</span>
+                    </div>
+                    <div class="w-full bg-yellow-200 rounded-full h-2">
+                        <div class="bg-yellow-600 h-2 rounded-full" style="width: {{ empleado.progreso }}%"></div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center py-8 text-gray-500">
+                <i class="fas fa-inbox text-3xl mb-2"></i>
+                <p class="text-sm">No hay empleados en pre-ingreso</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Columna: En Proceso -->
+    <div class="bg-white rounded-lg shadow-lg">
+        <div class="bg-blue-500 text-white px-4 py-3 rounded-t-lg">
+            <h3 class="font-semibold text-lg flex items-center justify-between">
+                <span>
+                    <i class="fas fa-spinner mr-2"></i>
+                    En Proceso
+                </span>
+                <span class="bg-blue-600 rounded-full px-2 py-1 text-sm">
+                    {{ empleados_en_proceso.count }}
+                </span>
+            </h3>
+        </div>
+        <div class="p-4 space-y-3 max-h-[calc(100vh-250px)] overflow-y-auto">
+            {% for empleado in empleados_en_proceso %}
+            <div class="border-2 border-blue-200 rounded-lg p-4 bg-blue-50 hover:shadow-md transition-shadow duration-150 cursor-pointer"
+                 onclick="window.location.href='{% url 'gestor:empleado_detail' empleado.pk %}'">
+                <div class="flex items-start justify-between">
+                    <div class="flex items-center">
+                        <div class="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-semibold">
+                            {{ empleado.usuario.first_name.0|default:empleado.usuario.username.0|upper }}
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900">
+                                {{ empleado.usuario.get_full_name }}
+                            </p>
+                            <p class="text-xs text-gray-600">
+                                {{ empleado.puesto.titulo }}
+                            </p>
+                            <p class="text-xs text-gray-500">
+                                <i class="fas fa-calendar mr-1"></i>{{ empleado.fecha_ingreso|date:"d/m/Y" }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <div class="flex items-center justify-between text-xs text-gray-600 mb-1">
+                        <span>Progreso</span>
+                        <span class="font-semibold">{{ empleado.progreso }}%</span>
+                    </div>
+                    <div class="w-full bg-blue-200 rounded-full h-2">
+                        <div class="bg-blue-600 h-2 rounded-full" style="width: {{ empleado.progreso }}%"></div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center py-8 text-gray-500">
+                <i class="fas fa-inbox text-3xl mb-2"></i>
+                <p class="text-sm">No hay empleados en proceso</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Columna: Completado -->
+    <div class="bg-white rounded-lg shadow-lg">
+        <div class="bg-green-500 text-white px-4 py-3 rounded-t-lg">
+            <h3 class="font-semibold text-lg flex items-center justify-between">
+                <span>
+                    <i class="fas fa-check-circle mr-2"></i>
+                    Completado
+                </span>
+                <span class="bg-green-600 rounded-full px-2 py-1 text-sm">
+                    {{ empleados_completados.count }}
+                </span>
+            </h3>
+        </div>
+        <div class="p-4 space-y-3 max-h-[calc(100vh-250px)] overflow-y-auto">
+            {% for empleado in empleados_completados %}
+            <div class="border-2 border-green-200 rounded-lg p-4 bg-green-50 hover:shadow-md transition-shadow duration-150 cursor-pointer"
+                 onclick="window.location.href='{% url 'gestor:empleado_detail' empleado.pk %}'">
+                <div class="flex items-start justify-between">
+                    <div class="flex items-center">
+                        <div class="h-10 w-10 rounded-full bg-green-500 flex items-center justify-center text-white font-semibold">
+                            {{ empleado.usuario.first_name.0|default:empleado.usuario.username.0|upper }}
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900">
+                                {{ empleado.usuario.get_full_name }}
+                            </p>
+                            <p class="text-xs text-gray-600">
+                                {{ empleado.puesto.titulo }}
+                            </p>
+                            <p class="text-xs text-gray-500">
+                                <i class="fas fa-calendar mr-1"></i>{{ empleado.fecha_ingreso|date:"d/m/Y" }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <div class="flex items-center justify-center">
+                        <i class="fas fa-check-circle text-green-600 text-2xl"></i>
+                        <span class="ml-2 text-sm font-semibold text-green-700">100% Completado</span>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center py-8 text-gray-500">
+                <i class="fas fa-inbox text-3xl mb-2"></i>
+                <p class="text-sm">No hay empleados completados</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
