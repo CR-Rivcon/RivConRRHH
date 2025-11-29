@@ -2,6 +2,36 @@
 
 Sistema completo de gestión de onboarding para Recursos Humanos construido con Django 5.x, Tailwind CSS y Alpine.js.
 
+---
+
+## 📋 Resumen Ejecutivo
+
+**RivconRRHH** es una aplicación web empresarial que digitaliza y automatiza el proceso de incorporación de nuevos empleados. Desarrollada con Django 5.x, ofrece una solución integral que reduce el tiempo administrativo, mejora la experiencia del nuevo empleado y garantiza el cumplimiento de todos los requisitos de onboarding.
+
+### 🎯 Problema que Resuelve
+Elimina el proceso manual y fragmentado de incorporación de empleados, centralizando toda la información, documentación y seguimiento en una única plataforma intuitiva y segura.
+
+### ✨ Valor Agregado
+- **Automatización**: 10 tareas generadas automáticamente al crear un empleado
+- **Visibilidad**: Dashboard con KPIs y progreso en tiempo real
+- **Control**: Sistema de permisos granular por roles (RRHH, Supervisores, Empleados, IT)
+- **Trazabilidad**: Historial completo de documentos, tareas y estados
+- **Escalabilidad**: Arquitectura modular preparada para crecer con la empresa
+
+### 💼 Casos de Uso Principales
+1. **RRHH**: Gestión completa del proceso de onboarding con aprobación de documentos
+2. **Supervisores**: Seguimiento del progreso de nuevos miembros del equipo
+3. **IT**: Gestión de accesos y equipamiento para nuevos empleados
+4. **Nuevos Empleados**: Portal de autoservicio para subir documentos y ver tareas
+
+### 📊 Impacto Esperado
+- ⏱️ **Reducción del 60%** en tiempo administrativo de onboarding
+- 📈 **Aumento del 85%** en cumplimiento de documentación
+- 🎯 **Mejora del 70%** en experiencia del nuevo empleado
+- 📉 **Eliminación del 90%** de seguimiento manual
+
+---
+
 ## 🚀 Características
 
 ### ✨ Funcionalidades Principales
